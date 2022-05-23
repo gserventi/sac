@@ -43,8 +43,35 @@ class PagoController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'fecha_pago' => 'required',
+            'id_proveedor' => 'required',
+            'id_forma_de_pago' => 'required',
+            'total' => 'required'
+        ]);
         $datosPago = request()->except('_token');
-        Pago::insert($datosPago);
+
+        /* Grabar cabecera de pago */
+        $fecha_pago = $request->fecha_pago;
+        $id_proveedor = $request->id_proveedor;
+        $id_forma_de_pago = $request->id_forma_de_pago;
+        $total = $request->total;
+        $id_pago = Pago::insertGetId([
+            'fecha_pago' => $fecha_pago,
+            'id_proveedor' => $id_proveedor,
+            'id_forma_de_pago' => $id_forma_de_pago,
+            'total' => $total
+        ]);
+
+        /* Grabar items de pago */
+        /*foreach ($request as $compras) {
+            $id_compra = $compras->id;
+            ItemPago::insert([
+                'id_pago' => $id_pago,
+                'id_compra' => $id_compra
+            ]);
+        };*/
+
         return redirect('pago');
     }
 
@@ -62,6 +89,7 @@ class PagoController extends Controller
             ->join('compras', 'items_pago.id_compra', '=','compras.id')
             ->join('tipos_de_comprobantes','compras.id_tipo_comprobante','=','tipos_de_comprobantes.id')
             ->select('compras.id','compras.fecha_comprobante', 'tipos_de_comprobantes.nombre', 'compras.numero_comprobante', 'compras.neto')
+            ->where('id_pago', '=', $id)
             ->get();
         return view('pago.show')
             ->with(compact('pago'))
@@ -82,6 +110,7 @@ class PagoController extends Controller
             ->join('compras', 'items_pago.id_compra', '=','compras.id')
             ->join('tipos_de_comprobantes','compras.id_tipo_comprobante','=','tipos_de_comprobantes.id')
             ->select('compras.id','compras.fecha_comprobante', 'tipos_de_comprobantes.nombre', 'compras.numero_comprobante', 'compras.neto')
+            ->where('id_pago', '=', $id)
             ->get();
         return view('pago.edit')
             ->with(compact('pago'))

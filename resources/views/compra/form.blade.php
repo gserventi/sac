@@ -137,8 +137,6 @@
     </div>
 </div>
 
-
-
 <div class="row">
     <div class="col-12 col-md-6">
         <div class="form-group">
@@ -147,13 +145,7 @@
             <small class="form-text small-text-light">Ingrese el valor del neto</small>
         </div>
     </div>
-    <div class="col-12 col-md-6">
-        <div class="form-group">
-            <label for="activo" class="form-control-label">Pagada: </label>
-            <input type="checkbox" name="pagada" id="pagada" value="{{$compra->pagada ?? ''}}" class="form-check" @if((isset($compra->pagada) && $compra->pagada== 1))  checked @else '' @endif>
-            <small class="form-text small-text-light">Marque este casillero para indicar que esta factura esta pagada</small>
-        </div>
-    </div>
+
 </div>
 
 <button class="au-btn au-btn-icon au-btn--blue au-btn--small" type="submit">Guardar</button>
