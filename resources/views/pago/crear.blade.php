@@ -68,7 +68,7 @@
                                                 <td>{{$compra->numero_comprobante}}</td>
                                                 <td>$ <span id="valorNeto-{{$compra->id}}">{{$compra->neto}}</span></td>
                                                 <td>
-                                                    <input type="checkbox" name="checkPagar" id="checkPagar-{{$compra->id}}"
+                                                    <input type="checkbox" name="checkPagar-{{$compra->id}}" id="checkPagar-{{$compra->id}}"
                                                            onclick="calcularTotal('checkPagar-{{$compra->id}}','valorNeto-{{$compra->id}}')">
                                                 </td>
                                             </tr>

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('periodo',\App\Http\Controllers\PeriodoController::class);
     Route::resource('compra',\App\Http\Controllers\CompraController::class);
     Route::resource('pago', \App\Http\Controllers\PagoController::class);
+    Route::resource('itemPago', \App\Http\Controllers\ItemPagoController::class);
     Route::resource('puntoDeVenta', \App\Http\Controllers\PuntoDeVentaController::class);
     Route::resource('cliente', \App\Http\Controllers\ClienteController::class);
     Route::resource('resumenPeriodo', \App\Http\Controllers\ResumenPeriodoController::class);

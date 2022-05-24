@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Compra;
+use App\Models\FormaDePago;
 use App\Models\ItemPago;
+use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
 class ItemPagoController extends Controller
@@ -35,7 +38,8 @@ class ItemPagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
     }
 
     /**
@@ -82,4 +86,5 @@ class ItemPagoController extends Controller
     {
         //
     }
+
 }

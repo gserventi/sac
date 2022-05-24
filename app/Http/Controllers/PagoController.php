@@ -49,7 +49,6 @@ class PagoController extends Controller
             'id_forma_de_pago' => 'required',
             'total' => 'required'
         ]);
-        $datosPago = request()->except('_token');
 
         /* Grabar cabecera de pago */
         $fecha_pago = $request->fecha_pago;
@@ -64,13 +63,21 @@ class PagoController extends Controller
         ]);
 
         /* Grabar items de pago */
-        /*foreach ($request as $compras) {
-            $id_compra = $compras->id;
-            ItemPago::insert([
-                'id_pago' => $id_pago,
-                'id_compra' => $id_compra
-            ]);
-        };*/
+        $datosPago = request()->except('_token');
+        $compras = array_intersect_key($datosPago, array_flip(preg_grep('/^checkPagar-\d/i', array_keys($datosPago))));
+        foreach ($compras as $compra_key => $compra_value) {
+            if ($compra_value = "on") {
+                $id_compra = substr($compra_key, strpos($compra_key, "-")+1);
+                ItemPago::insert([
+                    'id_pago' => $id_pago,
+                    'id_compra' => $id_compra
+                ]);
+                Compra::where('id', '=', $id_compra)->update([
+                    'pagada' => true
+                ]);
+
+            }
+        };
 
         return redirect('pago');
     }
