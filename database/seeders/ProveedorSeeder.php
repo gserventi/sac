@@ -22,7 +22,8 @@ class ProveedorSeeder extends Seeder
                 'id_porcentaje_iva'=>1,
                 'id_forma_de_pago_default'=>5,
                 'id_tipo_comprobante'=>3,
-                'activo'=>true
+                'activo'=>true,
+                'updated_by'=>1
             ],
         );
     }

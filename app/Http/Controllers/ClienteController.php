@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClienteController extends Controller
 {
@@ -37,6 +38,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $cliente = request()->except('_token');
+        $cliente += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $cliente['activo'] = true;
         }
@@ -44,6 +46,7 @@ class ClienteController extends Controller
             $cliente['activo'] = false;
         }
         Cliente::insert($cliente);
+
         return redirect('cliente');
     }
 
@@ -87,6 +90,7 @@ class ClienteController extends Controller
         else {
             $cliente['activo'] = false;
         }
+        $cliente += ['updated_by' => Auth::user()->id];
         Cliente::where('id','=',$id)->update($cliente);
         $cliente = Cliente::findOrFail($id);
         return redirect('cliente');

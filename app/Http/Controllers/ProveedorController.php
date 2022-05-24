@@ -8,6 +8,7 @@ use App\Models\Proveedor;
 use App\Models\Rubro;
 use App\Models\TipoDeComprobante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProveedorController extends Controller
 {
@@ -45,6 +46,7 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $proveedor = request()->except('_token');
+        $proveedor += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $proveedor['activo'] = true;
         }
@@ -97,6 +99,7 @@ class ProveedorController extends Controller
     public function update(Request $request, $id)
     {
         $proveedor = request()->except('_token', '_method');
+        $proveedor += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $proveedor['activo'] = true;
         }

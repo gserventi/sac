@@ -15,10 +15,11 @@ class PagoSeeder extends Seeder
     public function run()
     {
         DB::table('pagos')->insert([
-            'fecha_pago'=>date('2022-01-11'),
+            'fecha_pago'=>date('2022-04-11'),
             'id_proveedor'=>1,
             'id_forma_de_pago'=>5,
-            'total'=>9122.09
+            'total'=>9122.09,
+            'updated_by'=>1
         ]);
     }
 }

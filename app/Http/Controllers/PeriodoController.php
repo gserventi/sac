@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Periodo;
 use App\Models\ResumenPeriodo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PeriodoController extends Controller
@@ -39,6 +40,7 @@ class PeriodoController extends Controller
     public function store(Request $request)
     {
         $datosPeriodo = request()->except('_token');
+        $datosPeriodo += ['updated_by' => Auth::user()->id];
         if($request->has('cerrado')) {
             $datosPeriodo['cerrado'] = true;
         }
@@ -86,6 +88,7 @@ class PeriodoController extends Controller
     public function update(Request $request, $id)
     {
         $datosPeriodo = request()->except('_token', '_method');
+        $datosPeriodo += ['updated_by' => Auth::user()->id];
         if($request->has('cerrado')) {
             $datosPeriodo['cerrado'] = true;
         }
@@ -116,7 +119,8 @@ class PeriodoController extends Controller
         if ($periodo->cerrado == 0) {
             Periodo::where('id','=',$id)->update([
                 'cerrado' => 1,
-                'fecha_cierre' => $curTime
+                'fecha_cierre' => $curTime,
+                'updated_by' => Auth::user()->id
             ]);
             $totalVentasPeriodo = DB::table('ventas')
                 ->select('total')
@@ -130,7 +134,8 @@ class PeriodoController extends Controller
                 'id_periodo' => $id,
                 'total_iva_ventas' => $totalVentasPeriodo,
                 'total_iva_compras' => $totalComprasPeriodo,
-                'diferencia' => $totalVentasPeriodo - $totalComprasPeriodo
+                'diferencia' => $totalVentasPeriodo - $totalComprasPeriodo,
+                'updated_by' => Auth::user()->id
             ]);
         }
         return redirect('periodo');

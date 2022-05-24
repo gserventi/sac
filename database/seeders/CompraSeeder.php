@@ -16,7 +16,7 @@ class CompraSeeder extends Seeder
     {
         DB::table('compras')->insert([
             ['id_periodo'=>1,
-            'fecha_comprobante'=>date('2022-01-10'),
+            'fecha_comprobante'=>date('2022-04-10'),
             'id_tipo_comprobante'=>3,
             'numero_comprobante'=>'0050-02384050',
             'id_proveedor'=>1,
@@ -26,10 +26,11 @@ class CompraSeeder extends Seeder
             'percepcion_iibb_caba_15'=>108.94,
             'percepcion_iibb_ba_01'=>7.26,
             'neto'=>9122.09,
-            'pagada'=>true],
+            'pagada'=>true,
+            'updated_by'=>1],
 
             ['id_periodo'=>1,
-            'fecha_comprobante'=>'2022-01-12',
+            'fecha_comprobante'=>'2022-04-12',
             'id_tipo_comprobante'=>3,
             'numero_comprobante'=>'0050-02384051',
             'id_proveedor'=>1,
@@ -39,10 +40,11 @@ class CompraSeeder extends Seeder
             'percepcion_iibb_caba_15'=>48.29,
             'percepcion_iibb_ba_01'=>3.22,
             'neto'=>4043.43,
-            'pagada'=>false],
+            'pagada'=>false,
+            'updated_by'=>1],
 
             ['id_periodo'=>2,
-            'fecha_comprobante'=>date('2022-02-20'),
+            'fecha_comprobante'=>date('2022-05-20'),
             'id_tipo_comprobante'=>3,
             'numero_comprobante'=>'0050-02384052',
             'id_proveedor'=>1,
@@ -52,7 +54,8 @@ class CompraSeeder extends Seeder
             'percepcion_iibb_caba_15'=>108.94,
             'percepcion_iibb_ba_01'=>7.26,
             'neto'=>9122.09,
-            'pagada'=>false]
+            'pagada'=>false,
+            'updated_by'=>1]
         ]);
     }
 }

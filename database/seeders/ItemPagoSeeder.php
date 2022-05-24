@@ -16,7 +16,8 @@ class ItemPagoSeeder extends Seeder
     {
         DB::table('items_pago')->insert([
             'id_pago'=>1,
-            'id_compra'=>1
+            'id_compra'=>1,
+            'updated_by'=>1
         ]);
     }
 }

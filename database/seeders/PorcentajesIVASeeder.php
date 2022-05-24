@@ -15,9 +15,9 @@ class PorcentajesIVASeeder extends Seeder
     public function run()
     {
         DB::table('porcentajes_iva')->insert([
-            ['porcentaje'=>21, 'activo'=>true],
-            ['porcentaje'=>27, 'activo'=>true],
-            ['porcentaje'=>10.5, 'activo'=>true]
+            ['porcentaje'=>21, 'activo'=>true, 'updated_by'=>1],
+            ['porcentaje'=>27, 'activo'=>true, 'updated_by'=>1],
+            ['porcentaje'=>10.5, 'activo'=>true, 'updated_by'=>1]
         ]);
     }
 }

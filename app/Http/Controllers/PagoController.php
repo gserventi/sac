@@ -8,6 +8,7 @@ use App\Models\Pago;
 use App\Models\Compra;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PagoController extends Controller
@@ -59,7 +60,8 @@ class PagoController extends Controller
             'fecha_pago' => $fecha_pago,
             'id_proveedor' => $id_proveedor,
             'id_forma_de_pago' => $id_forma_de_pago,
-            'total' => $total
+            'total' => $total,
+            'updated_by' => Auth::user()->id
         ]);
 
         /* Grabar items de pago */
@@ -70,10 +72,12 @@ class PagoController extends Controller
                 $id_compra = substr($compra_key, strpos($compra_key, "-")+1);
                 ItemPago::insert([
                     'id_pago' => $id_pago,
-                    'id_compra' => $id_compra
+                    'id_compra' => $id_compra,
+                    'updated_by' => Auth::user()->id
                 ]);
                 Compra::where('id', '=', $id_compra)->update([
-                    'pagada' => true
+                    'pagada' => true,
+                    'updated_by' => Auth::user()->id
                 ]);
 
             }
@@ -134,9 +138,6 @@ class PagoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pago=request()->except('_token', '_method');
-        Pago::where('id','=',$id)->update($pago);
-        $pago = Pago::findOrFail($id);
         return redirect('pago');
     }
 

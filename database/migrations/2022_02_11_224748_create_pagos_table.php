@@ -28,6 +28,7 @@ class CreatePagosTable extends Migration
             $table->float('total');
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->integer('updated_by');
         });
     }
 

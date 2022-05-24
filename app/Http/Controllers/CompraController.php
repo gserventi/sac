@@ -7,6 +7,7 @@ use App\Models\Periodo;
 use App\Models\Proveedor;
 use App\Models\TipoDeComprobante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompraController extends Controller
 {
@@ -43,6 +44,7 @@ class CompraController extends Controller
     public function store(Request $request)
     {
         $datosCompra = request()->except('_token');
+        $datosCompra += ['updated_by' => Auth::user()->id];
         if($request->has('pagada')) {
             $datosCompra['pagada'] = true;
         }
@@ -93,6 +95,7 @@ class CompraController extends Controller
     public function update(Request $request, $id)
     {
         $datosCompra = request()->except('_token', '_method');
+        $datosCompra += ['updated_by' => Auth::user()->id];
         if($request->has('pagada')) {
             $datosCompra['pagada'] = true;
         }

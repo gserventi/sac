@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PuntoDeVenta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PuntoDeVentaController extends Controller
 {
@@ -37,6 +38,7 @@ class PuntoDeVentaController extends Controller
     public function store(Request $request)
     {
         $datosPuntoDeVenta = request()->except('_token');
+        $datosPuntoDeVenta += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosPuntoDeVenta['activo'] = true;
         }
@@ -80,6 +82,7 @@ class PuntoDeVentaController extends Controller
     public function update(Request $request, $id)
     {
         $datosPuntoDeVenta = request()->except('_token', '_method');
+        $datosPuntoDeVenta += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosPuntoDeVenta['activo'] = true;
         }

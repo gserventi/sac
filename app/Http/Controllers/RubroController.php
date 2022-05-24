@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rubro;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RubroController extends Controller
 {
@@ -37,6 +38,7 @@ class RubroController extends Controller
     public function store(Request $request)
     {
         $datosRubro = request()->except('_token');
+        $datosRubro += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosRubro['activo'] = true;
         }
@@ -80,6 +82,7 @@ class RubroController extends Controller
     public function update(Request $request, $id)
     {
         $datosRubro = request()->except('_token', '_method');
+        $datosRubro += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosRubro['activo'] = true;
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TipoDeComprobante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TipoDeComprobanteController extends Controller
 {
@@ -37,6 +38,7 @@ class TipoDeComprobanteController extends Controller
     public function store(Request $request)
     {
         $datosTipoDeComprobante = request()->except('_token');
+        $datosTipoDeComprobante += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosTipoDeComprobante['activo'] = true;
         }
@@ -86,6 +88,7 @@ class TipoDeComprobanteController extends Controller
     public function update(Request $request, $id)
     {
         $datosTipoDeComprobante = request()->except('_token', '_method');
+        $datosTipoDeComprobante += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosTipoDeComprobante['activo'] = true;
         }

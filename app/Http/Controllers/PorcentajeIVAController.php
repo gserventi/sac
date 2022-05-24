@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PorcentajeIVA;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PorcentajeIVAController extends Controller
 {
@@ -37,6 +38,7 @@ class PorcentajeIVAController extends Controller
     public function store(Request $request)
     {
         $datosPorcentajeIVA = request()->except('_token');
+        $datosPorcentajeIVA += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $datosPorcentajeIVA['activo'] = true;
         }
@@ -80,6 +82,7 @@ class PorcentajeIVAController extends Controller
     public function update(Request $request, $id)
     {
         $porcentajeIVA = request()->except('_token', '_method');
+        $porcentajeIVA += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
             $porcentajeIVA['activo'] = true;
         }

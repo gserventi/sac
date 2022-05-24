@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FormaDePago;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormaDePagoController extends Controller
 {
@@ -37,6 +38,7 @@ class FormaDePagoController extends Controller
     public function store(Request $request)
     {
         $datosFormaDePago = request()->except('_token');
+        $datosFormaDePago += ['updated_by' => Auth::user()->id];
         if($request->has('activo_ventas')) {
             $datosFormaDePago['activo_ventas'] = true;
         }
@@ -86,6 +88,7 @@ class FormaDePagoController extends Controller
     public function update(Request $request, $id)
     {
         $datosFormaDePago = request()->except('_token', '_method');
+        $datosFormaDePago += ['updated_by' => Auth::user()->id];
         if($request->has('activo_ventas')) {
             $datosFormaDePago['activo_ventas'] = true;
         }

@@ -15,10 +15,11 @@ class CobroSeeder extends Seeder
     public function run()
     {
         DB::table('cobros')->insert([
-            'fecha_cobro'=>date('2022-01-20'),
+            'fecha_cobro'=>date('2022-04-20'),
             'id_cliente'=>1,
             'id_forma_de_pago'=>1,
-            'total'=>1210
+            'total'=>1210,
+            'updated_by'=>1
         ]);
     }
 }

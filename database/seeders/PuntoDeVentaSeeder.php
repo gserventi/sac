@@ -18,11 +18,13 @@ class PuntoDeVentaSeeder extends Seeder
             ['nombre'=>'FCE A',
             'prefijo'=>'00001',
             'ultimo_numero'=>'00000027',
-            'activo'=>true],
+            'activo'=>true,
+            'updated_by'=>1],
             ['nombre'=>'FC A',
             'prefijo'=>'00001',
             'ultimo_numero'=>'00000501',
-            'activo'=>true],
+            'activo'=>true,
+            'updated_by'=>1],
         ]);
     }
 }

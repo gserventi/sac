@@ -21,7 +21,8 @@ class ClienteSeeder extends Seeder
             'email'=>'email@algo.com',
             'telefono'=>'1234-5678',
             'observaciones'=>'alguna observacion',
-            'activo'=>true
+            'activo'=>true,
+            'updated_by'=>1
         ]);
     }
 }
