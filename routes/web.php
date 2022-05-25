@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('puntoDeVenta', \App\Http\Controllers\PuntoDeVentaController::class);
     Route::resource('cliente', \App\Http\Controllers\ClienteController::class);
     Route::resource('resumenPeriodo', \App\Http\Controllers\ResumenPeriodoController::class);
+    Route::resource('venta', \App\Http\Controllers\VentaController::class);
 
     Route::get('periodo/cerrar/{id}',[\App\Http\Controllers\PeriodoController::class, 'cerrar'])->name('periodo.cerrar');
 });

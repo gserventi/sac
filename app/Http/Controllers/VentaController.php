@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
+use App\Models\Periodo;
+use App\Models\PuntoDeVenta;
 use App\Models\Venta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VentaController extends Controller
 {
@@ -14,7 +18,8 @@ class VentaController extends Controller
      */
     public function index()
     {
-        //
+        $datos['ventas']=Venta::orderBy('id', 'DESC')->sortable()->paginate(10);
+        return view('venta.index', $datos);
     }
 
     /**
@@ -24,7 +29,10 @@ class VentaController extends Controller
      */
     public function create()
     {
-        //
+        $datos['periodos']=Periodo::where('cerrado', '=', false)->orderBy('mes', 'DESC')->get();
+        $datos['puntos_de_venta']=PuntoDeVenta::all();
+        $datos['clientes']=Cliente::all();
+        return view('venta.create', $datos);
     }
 
     /**
@@ -35,7 +43,19 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datosVenta = request()->except('_token');
+        $datosVenta += ['updated_by' => Auth::user()->id];
+        if($request->has('cobrada')) {
+            $datosVenta['cobrada'] = true;
+        }
+        else {
+            $datosVenta['cobrada'] = false;
+        }
+        Venta::insert($datosVenta);
+        $puntoDeVenta = PuntoDeVenta::findOrFail($datosVenta['id_punto_de_venta']);
+        $puntoDeVenta->ultimo_numero = $puntoDeVenta->ultimo_numero + 1;
+        PuntoDeVenta::where('id', '=', $datosVenta['id_punto_de_venta'])->update($puntoDeVenta);
+        return redirect('venta');
     }
 
     /**
@@ -44,9 +64,17 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function show(Venta $venta)
+    public function show($id)
     {
-        //
+        $venta=Venta::findOrFail($id);
+        $periodos=Periodo::all();
+        $puntos_de_venta=PuntoDeVenta::all();
+        $clientes=Cliente::all();
+        return view('venta.show')
+            ->with(compact('venta'))
+            ->with(compact('periodos'))
+            ->with(compact('puntos_de_venta'))
+            ->with(compact('clientes'));
     }
 
     /**
@@ -55,9 +83,17 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function edit(Venta $venta)
+    public function edit($id)
     {
-        //
+        $venta=Venta::findOrFail($id);
+        $periodos=Periodo::all();
+        $puntos_de_venta=PuntoDeVenta::all();
+        $clientes=Cliente::all();
+        return view('venta.edit')
+            ->with(compact('venta'))
+            ->with(compact('periodos'))
+            ->with(compact('puntos_de_venta'))
+            ->with(compact('clientes'));
     }
 
     /**
@@ -67,9 +103,19 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venta $venta)
+    public function update(Request $request, $id)
     {
-        //
+        $datosVenta = request()->except('_token', '_method');
+        $datosVenta += ['updated_by' => Auth::user()->id];
+        if($request->has('cobrada')) {
+            $datosVenta['cobrada'] = true;
+        }
+        else {
+            $datosVenta['cobrada'] = false;
+        }
+        Venta::where('id','=',$id)->update($datosVenta);
+        $venta=Venta::findOrFail($id);
+        return redirect('venta');
     }
 
     /**
@@ -78,9 +124,10 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Venta $venta)
+    public function destroy($id)
     {
-        //
+        Venta::destroy($id);
+        return redirect('venta');
     }
 
     public function ventasSinCobrar() {

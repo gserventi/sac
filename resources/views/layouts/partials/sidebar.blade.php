@@ -38,7 +38,7 @@
                                     <a href="#">Cobros</a>
                                 </li>
                                 <li>
-                                    <a href="#">Ventas</a>
+                                    <a href="{{route('venta.index')}}">Ventas</a>
                                 </li>
                             </ul>
                         </li>
@@ -47,6 +47,7 @@
                                 <i class="fas fa-copy"></i>Listados</a>
                         </li>
 
+                        @if(Auth::user()->is_admin)
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
                                 <i class="fas fa-gear"></i>Configuracion <i class="fas fa-caret-down"></i></a>
@@ -72,6 +73,7 @@
 
                             </ul>
                         </li>
+                            @endif
                     </ul>
                 </nav>
             </div>

@@ -70,7 +70,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
-                                <h2 class="title-1 m-b-25">Resumen Posicion IVA {{ now()->year }}</h2>
+                                <h2 class="title-1 m-b-25">Resumen IVA {{ now()->year }}</h2>
                             </div>
                             <div class="table-responsive m-b-40">
                                 <table class="table table-borderless table-data3">
