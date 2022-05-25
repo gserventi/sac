@@ -31,8 +31,8 @@ class PagoController extends Controller
      */
     public function create()
     {
-        $datos['formas_de_pago']=FormaDePago::all();
-        $datos['proveedores']=Proveedor::all();
+        $datos['formas_de_pago']=FormaDePago::where('activo_compras', '=', true)->orderBy('nombre')->get();
+        $datos['proveedores']=Proveedor::where('activo', '=', true)->orderBy('nombre')->get();
         return view('pago.create', $datos);
     }
 
@@ -154,13 +154,13 @@ class PagoController extends Controller
     }
 
     public function selectProveedor() {
-        $datos['proveedores']=Proveedor::all();
+        $datos['proveedores']=Proveedor::where('activo', '=', true)->orderBy('nombre')->get();
         return view('pago.selectProveedor', $datos);
     }
 
     public function crear($idProveedor)
     {
-        $datos['formas_de_pago']=FormaDePago::all();
+        $datos['formas_de_pago']=FormaDePago::where('activo_compras', '=', true)->orderBy('nombre')->get();
         $datos['proveedor']=Proveedor::findOrFail($idProveedor);
         $datos['compras']=Compra::where('id_proveedor', '=', $idProveedor)
             ->where('pagada', '=', '0')

@@ -30,10 +30,10 @@ class ProveedorController extends Controller
      */
     public function create()
     {
-        $datos['rubros']=Rubro::all();
-        $datos['porcentajes_iva']=PorcentajeIVA::all();
-        $datos['formas_de_pago']=FormaDePago::all();
-        $datos['tipos_de_comprobantes']=TipoDeComprobante::all();
+        $datos['rubros']=Rubro::where('activo', '=', true)->orderBy('nombre')->get();
+        $datos['porcentajes_iva']=PorcentajeIVA::where('activo', '=', true)->orderBy('porcentaje')->get();
+        $datos['formas_de_pago']=FormaDePago::where('activo_ventas', '=', true)->orderBy('nombre')->get();
+        $datos['tipos_de_comprobantes']=TipoDeComprobante::where('activo', '=', true)->orderBy('nombre')->get();
         return view('proveedor.create',$datos);
     }
 
@@ -77,10 +77,10 @@ class ProveedorController extends Controller
     public function edit($id)
     {
         $proveedor=Proveedor::findOrFail($id);
-        $rubros=Rubro::all()->sortBy('nombre');
-        $porcentajes_iva=PorcentajeIVA::all()->sortBy('porcentaje');
-        $formas_de_pago=FormaDePago::all()->sortBy('nombre');
-        $tipos_de_comprobantes=TipoDeComprobante::all()->sortBy('nombre');
+        $rubros=Rubro::where('activo', '=', true)->orderBy('nombre')->get();
+        $porcentajes_iva=PorcentajeIVA::where('activo', '=', true)->orderBy('porcentaje')->get();
+        $formas_de_pago=FormaDePago::where('activo_ventas', '=', true)->orderBy('nombre')->get();
+        $tipos_de_comprobantes=TipoDeComprobante::where('activo', '=', true)->orderBy('nombre')->get();
         return view('proveedor.edit')
             ->with(compact('proveedor'))
             ->with(compact('rubros'))

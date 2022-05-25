@@ -139,12 +139,12 @@ class CobroController extends Controller
     }
 
     public function selectCliente() {
-        $datos['clientes'] = Cliente::all();
+        $datos['clientes'] = Cliente::where('activo', '=', true)->orderBy('nombre')->get();
         return view('cobro.selectCliente', $datos);
     }
 
     public function crear($idCliente) {
-        $datos['formas_de_pago']=FormaDePago::all();
+        $datos['formas_de_pago']=FormaDePago::where('activo_ventas', '=', true)->orderBy('nombre')->get();
         $datos['cliente']=Cliente::findOrFail($idCliente);
         $datos['ventas']=Venta::where('id_cliente', '=', $idCliente)
             ->where('cobrada', '=', '0')

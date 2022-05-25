@@ -30,8 +30,8 @@ class VentaController extends Controller
     public function create()
     {
         $datos['periodos']=Periodo::where('cerrado', '=', false)->orderBy('mes', 'DESC')->get();
-        $datos['puntos_de_venta']=PuntoDeVenta::all();
-        $datos['clientes']=Cliente::all();
+        $datos['puntos_de_venta']=PuntoDeVenta::where('activo', '=', true)->orderBy('nombre')->get();
+        $datos['clientes']=Cliente::where('activo', '=', true)->orderBy('nombre')->get();
         return view('venta.create', $datos);
     }
 
@@ -86,9 +86,9 @@ class VentaController extends Controller
     public function edit($id)
     {
         $venta=Venta::findOrFail($id);
-        $periodos=Periodo::all();
-        $puntos_de_venta=PuntoDeVenta::all();
-        $clientes=Cliente::all();
+        $periodos=Periodo::where('cerrado', '=', false)->orderBy('mes', 'DESC')->get();
+        $puntos_de_venta=PuntoDeVenta::where('activo', '=', true)->orderBy('nombre')->get();
+        $clientes=Cliente::where('activo', '=', true)->orderBy('nombre')->get();
         return view('venta.edit')
             ->with(compact('venta'))
             ->with(compact('periodos'))

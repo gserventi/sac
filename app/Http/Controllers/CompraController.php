@@ -29,9 +29,9 @@ class CompraController extends Controller
      */
     public function create()
     {
-        $datos['periodos']=Periodo::all();
-        $datos['tipos_de_comprobantes']=TipoDeComprobante::all();
-        $datos['proveedores']=Proveedor::all();
+        $datos['periodos']=Periodo::where('cerrado', '=', false)->orderBy('mes', 'DESC')->get();
+        $datos['tipos_de_comprobantes']=TipoDeComprobante::where('activo', '=', true)->orderBy('nombre')->get();
+        $datos['proveedores']=Proveedor::where('activo', '=', true)->orderBy('nombre')->get();
         return view('compra.create', $datos);
     }
 
@@ -70,14 +70,14 @@ class CompraController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Compra  $compra
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit($id)
     {
         $compra=Compra::findOrFail($id);
-        $periodos=Periodo::all();
-        $tipos_de_comprobantes=TipoDeComprobante::all();
-        $proveedores=Proveedor::all();
+        $periodos=Periodo::where('cerrado', '=', false)->orderBy('mes', 'DESC')->get();
+        $tipos_de_comprobantes=TipoDeComprobante::where('activo', '=', true)->orderBy('nombre')->get();
+        $proveedores=Proveedor::where('activo', '=', true)->orderBy('nombre')->get();
         return view('compra.edit')
             ->with(compact('compra'))
             ->with(compact('periodos'))
