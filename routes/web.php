@@ -25,6 +25,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('compra/comprasSinPagar', [\App\Http\Controllers\CompraController::class, 'comprasSinPagar'])->name('compra.comprasSinPagar');
     Route::get('compra/comprasDelMes', [\App\Http\Controllers\CompraController::class, 'comprasDelMes'])->name('compra.comprasDelMes');
 
+    Route::get('cobro/crear/{id}', [\App\Http\Controllers\CobroController::class, 'crear'])->name('cobro.crear');
+    Route::get('cobro/selectCliente', [\App\Http\Controllers\CobroController::class, 'selectCliente'])->name('cobro.selectCliente');
+
     Route::get('venta/ventasSinCobrar', [\App\Http\Controllers\VentaController::class, 'ventasSinCobrar'])->name('venta.ventasSinCobrar');
     Route::get('venta/ventasDelMes',[\App\Http\Controllers\VentaController::class, 'ventasDelMes'])->name('venta.ventasDelMes');
 
@@ -41,6 +44,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('cliente', \App\Http\Controllers\ClienteController::class);
     Route::resource('resumenPeriodo', \App\Http\Controllers\ResumenPeriodoController::class);
     Route::resource('venta', \App\Http\Controllers\VentaController::class);
+    Route::resource('cobro',\App\Http\Controllers\CobroController::class);
 
     Route::get('periodo/cerrar/{id}',[\App\Http\Controllers\PeriodoController::class, 'cerrar'])->name('periodo.cerrar');
 });

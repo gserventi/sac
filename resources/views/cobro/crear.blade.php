@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-12 table-data__tool">
             <button class="au-btn au-btn-icon au-btn--blue au-btn--small">
-                <a class="item" style="color:white" href="{{route('pago.index')}}"><i class="zmdi zmdi-chevron-left"></i>Volver atras</a></button>
+                <a class="item" style="color:white" href="{{route('cobro.index')}}"><i class="zmdi zmdi-chevron-left"></i>Volver atras</a></button>
         </div>
     </div>
 
@@ -12,24 +12,24 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <strong>Crear Pago</strong>
+                    <strong>Crear Cobro</strong>
                 </div>
                 <div class="card-body card-block">
-                    <form action="{{route('pago.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form action="{{route('cobro.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
 
                         <div class="row">
                             <div class="col-12 col-md-4">
                                 <div class="form-group">
-                                    <label for="fecha_pago" class="form-control-label">Fecha de Pago: </label>
-                                    <input type="date" name="fecha_pago" id="fecha_pago" value="{{$pago->fecha_pago ?? date('Y-m-d')}}" class="form-control">
+                                    <label for="fecha_cobro" class="form-control-label">Fecha de Cobro: </label>
+                                    <input type="date" name="fecha_cobro" id="fecha_cobro" value="{{$cobro->fecha_cobro ?? date('Y-m-d')}}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-12 col-md-4">
                                 <div class="form-group">
-                                    <label for="id_proveedor" class="form-control-label">Proveedor: </label>
-                                    <select name="id_proveedor" id="select" class="form-control">
-                                        <option selected value="{{$proveedor->id ?? ''}}">{{$proveedor->nombre ?? ''}}</option>
+                                    <label for="id_cliente" class="form-control-label">Cliente: </label>
+                                    <select name="id_cliente" id="select" class="form-control">
+                                        <option selected value="{{$cliente->id ?? ''}}">{{$cliente->nombre ?? ''}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -51,29 +51,27 @@
                                 <table class="table table-borderless table-data3">
                                     <thead>
                                     <tr>
-                                        <th>Codigo de Compra</th>
+                                        <th>Codigo de Venta</th>
                                         <th>Fecha de Comprobante</th>
-                                        <th>Tipo de Comprobante</th>
                                         <th>Numero de Comprobante</th>
-                                        <th>Importe Neto</th>
+                                        <th>Importe Total</th>
                                         <th>Pagar?</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($compras as $compra)
-                                            <tr class="tr-shadow">
-                                                <td>{{$compra->id}}</td>
-                                                <td>{{date('d/m/Y', strtotime($compra->fecha_comprobante))}}</td>
-                                                <td>{{$compra->tipoDeComprobante->nombre}}</td>
-                                                <td>{{$compra->numero_comprobante}}</td>
-                                                <td>$ <span id="valorNeto-{{$compra->id}}">{{$compra->neto}}</span></td>
-                                                <td>
-                                                    <input type="checkbox" name="checkPagar-{{$compra->id}}" id="checkPagar-{{$compra->id}}"
-                                                           onclick="calcularTotal('checkPagar-{{$compra->id}}','valorNeto-{{$compra->id}}', 'pagoTotal')">
-                                                </td>
-                                            </tr>
-                                            <tr class="spacer"></tr>
-                                        @endforeach
+                                    @foreach($ventas as $venta)
+                                        <tr class="tr-shadow">
+                                            <td>{{$venta->id}}</td>
+                                            <td>{{date('d/m/Y', strtotime($venta->fecha_comprobante))}}</td>
+                                            <td>{{$venta->numero_comprobante}}</td>
+                                            <td>$ <span id="valorNeto-{{$venta->id}}">{{$venta->total}}</span></td>
+                                            <td>
+                                                <input type="checkbox" name="checkCobrar-{{$venta->id}}" id="checkCobrar-{{$venta->id}}"
+                                                       onclick="calcularTotal('checkCobrar-{{$venta->id}}','valorNeto-{{$venta->id}}', 'cobroTotal')">
+                                            </td>
+                                        </tr>
+                                        <tr class="spacer"></tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -86,7 +84,7 @@
                             <div class="col-12 col-md-3">
                                 <div class="form-group">
                                     <label for="total" class="form-control-label">Total: </label>
-                                    <input type="number" name="total" id="pagoTotal" class="form-control" value="{{$pago->total ?? '0.00'}}" step=".01">
+                                    <input type="number" name="total" id="cobroTotal" class="form-control" value="{{$cobro->total ?? '0.00'}}" step=".01">
                                 </div>
                             </div>
                         </div>
@@ -100,4 +98,5 @@
     </div>
 
 @endsection
+
 

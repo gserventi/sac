@@ -35,7 +35,7 @@
                                     <a href="{{route('cliente.index')}}">Clientes</a>
                                 </li>
                                 <li>
-                                    <a href="#">Cobros</a>
+                                    <a href="{{route('cobro.index')}}">Cobros</a>
                                 </li>
                                 <li>
                                     <a href="{{route('venta.index')}}">Ventas</a>

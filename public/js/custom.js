@@ -1,7 +1,7 @@
 // Calcular el total de un nuevo pago cuando el usuario habilita el check de los comprobantes pendientes
-function calcularTotal(check, neto) {
+function calcularTotal(check, neto, montoTotal) {
     let checkBox = document.getElementById(check);
-    let total = document.getElementById("pagoTotal");
+    let total = document.getElementById(montoTotal);
     let valor = document.getElementById(neto).innerText;
     if(isNaN(total.value)||(total.value==0)) {tot = 0;} else {tot=parseFloat(total.value);}
     if (checkBox.checked === true) {

@@ -14,7 +14,7 @@ class CreateItemsCobrosTable extends Migration
      */
     public function up()
     {
-        Schema::create('items_cobros', function (Blueprint $table) {
+        Schema::create('items_cobro', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_cobro')
                 ->constrained('cobros')
@@ -37,6 +37,6 @@ class CreateItemsCobrosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item_cobros');
+        Schema::dropIfExists('items_cobro');
     }
 }

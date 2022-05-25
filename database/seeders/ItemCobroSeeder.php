@@ -14,7 +14,7 @@ class ItemCobroSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('items_cobros')->insert([
+        DB::table('items_cobro')->insert([
             'id_cobro'=>1,
             'id_venta'=>1,
             'updated_by'=>1

@@ -18,7 +18,6 @@
                         <th>@sortablelink('id','Codigo')</th>
                         <th>@sortablelink('id_periodo','Periodo')</th>
                         <th>@sortablelink('fecha_comprobante','Fecha')</th>
-                        <th>@sortablelink('id_punto_de_venta','Punto de Venta')</th>
                         <th>@sortablelink('numero_comprobante','Numero de Comprobante')</th>
                         <th>@sortablelink('id_cliente','Cliente')</th>
                         <th>@sortablelink('no_gravado','No Gravado')</th>
@@ -35,7 +34,6 @@
                             <td>{{$venta->id}}</td>
                             <td>{{$venta->periodo->nombre}}</td>
                             <td>@if(isset($venta->fecha_comprobante)) {{date('d/m/Y', strtotime($venta->fecha_comprobante))}} @endif </td>
-                            <td>{{$venta->puntoDeVenta->nombre}}</td>
                             <td>{{$venta->numero_comprobante}}</td>
                             <td>{{$venta->cliente->nombre}}</td>
                             <td>@if($venta->no_gravado > 0) $ {{number_format($venta->no_gravado, 2)}} @else - @endif</td>
