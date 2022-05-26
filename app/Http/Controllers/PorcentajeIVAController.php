@@ -3,26 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\PorcentajeIVA;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class PorcentajeIVAController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
-        $datos['porcentajes_iva']=PorcentajeIVA::orderBy('porcentaje')->sortable()->paginate(10);
+        $datos['porcentajes_iva']=PorcentajeIVA::sortable()->paginate(10);
         return view('porcentajeIVA.index', $datos);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -32,11 +39,15 @@ class PorcentajeIVAController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'porcentaje' => 'required|numeric'
+        ]);
         $datosPorcentajeIVA = request()->except('_token');
         $datosPorcentajeIVA += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
@@ -52,19 +63,19 @@ class PorcentajeIVAController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PorcentajeIVA  $porcentajesIVA
-     * @return \Illuminate\Http\Response
+     * @param PorcentajeIVA $porcentajesIVA
+     * @return Response
      */
-    public function show(PorcentajeIVA $porcentajesIVA)
+/*    public function show(PorcentajeIVA $porcentajesIVA)
     {
         //
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PorcentajeIVA  $porcentajesIVA
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function edit($id)
     {
@@ -75,12 +86,16 @@ class PorcentajeIVAController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PorcentajeIVA  $porcentajesIVA
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'porcentaje' => 'required|numeric'
+        ]);
         $porcentajeIVA = request()->except('_token', '_method');
         $porcentajeIVA += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
@@ -90,15 +105,15 @@ class PorcentajeIVAController extends Controller
             $porcentajeIVA['activo'] = false;
         }
         PorcentajeIVA::where('id','=',$id)->update($porcentajeIVA);
-        $porcentajeIVA = PorcentajeIVA::findOrFail($id);
+        //$porcentajeIVA = PorcentajeIVA::findOrFail($id);
         return redirect('porcentajeIVA');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PorcentajeIVA  $porcentajesIVA
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy($id)
     {

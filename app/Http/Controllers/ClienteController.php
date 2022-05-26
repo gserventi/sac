@@ -3,26 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ClienteController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
-        $datos['clientes']=Cliente::orderBy('nombre')->sortable()->paginate(10);
+        $datos['clientes']=Cliente::sortable()->paginate(10);
         return view('cliente.index', $datos);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -32,11 +39,20 @@ class ClienteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'nombre' => 'required|string|max:255',
+            'cuit' => 'nullable|string|max:11',
+            'dias_cobro' => 'nullable|numeric|max:365',
+            'email' => 'nullable|email',
+            'telefono' => 'nullable|string|max:100',
+            'observaciones' => 'nullable|string|max:255'
+        ]);
         $cliente = request()->except('_token');
         $cliente += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
@@ -53,19 +69,19 @@ class ClienteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cliente  $cliente
-     * @return \Illuminate\Http\Response
+     * @param Cliente $cliente
+     * @return Response
      */
-    public function show(Cliente $cliente)
+/*    public function show(Cliente $cliente)
     {
         //
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Cliente  $cliente
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function edit($id)
     {
@@ -77,12 +93,21 @@ class ClienteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cliente  $cliente
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'nombre' => 'required|string|max:255',
+            'cuit' => 'nullable|string|max:11',
+            'dias_cobro' => 'nullable|numeric|max:365',
+            'email' => 'nullable|email',
+            'telefono' => 'nullable|string|max:100',
+            'observaciones' => 'nullable|string|max:255'
+        ]);
         $cliente = request()->except('_token', '_method');
         if($request->has('activo')) {
             $cliente['activo'] = true;
@@ -92,15 +117,15 @@ class ClienteController extends Controller
         }
         $cliente += ['updated_by' => Auth::user()->id];
         Cliente::where('id','=',$id)->update($cliente);
-        $cliente = Cliente::findOrFail($id);
+        //$cliente = Cliente::findOrFail($id);
         return redirect('cliente');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cliente  $cliente
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy($id)
     {

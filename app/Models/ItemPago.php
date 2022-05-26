@@ -2,12 +2,41 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Kyslik\ColumnSortable\Sortable;
 
+/**
+ * App\Models\ItemPago
+ *
+ * @property int $id
+ * @property int $id_pago
+ * @property int $id_compra
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property int $updated_by
+ * @property-read Collection|Compra[] $compras
+ * @property-read int|null $compras_count
+ * @property-read Pago $pago
+ * @method static Builder|ItemPago newModelQuery()
+ * @method static Builder|ItemPago newQuery()
+ * @method static Builder|ItemPago query()
+ * @method static Builder|ItemPago sortable($defaultParameters = null)
+ * @method static Builder|ItemPago whereCreatedAt($value)
+ * @method static Builder|ItemPago whereId($value)
+ * @method static Builder|ItemPago whereIdCompra($value)
+ * @method static Builder|ItemPago whereIdPago($value)
+ * @method static Builder|ItemPago whereUpdatedAt($value)
+ * @method static Builder|ItemPago whereUpdatedBy($value)
+ * @mixin Eloquent
+ */
 class ItemPago extends Model
 {
     use HasFactory;
@@ -23,11 +52,23 @@ class ItemPago extends Model
         'updated_at'
     ];
 
-    public function pago() {
+    /**
+     * Devuelve la cabecera del pago asociada a los items
+     *
+     * @return BelongsTo
+     */
+    public function pago(): BelongsTo
+    {
         return $this->belongsTo(Pago::class, 'id_pago');
     }
 
-    public function compras() {
+    /**
+     * Devuelve la compra asociada a los items de pago
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function compras(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Compra::class, 'id_compra');
     }
 }

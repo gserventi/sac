@@ -7,27 +7,34 @@ use App\Models\Cobro;
 use App\Models\FormaDePago;
 use App\Models\ItemCobro;
 use App\Models\Venta;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CobroController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
-        $datos['cobros'] = Cobro::orderBy('id', 'DESC')->sortable()->paginate(10);
+        $datos['cobros'] = Cobro::sortable()->paginate(10);
         return view('cobro.index', $datos);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -39,16 +46,17 @@ class CobroController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
         $this->validate($request, [
-            'fecha_cobro' => 'required',
-            'id_cliente' => 'required',
-            'id_forma_de_pago' => 'required',
-            'total' => 'required'
+            'fecha_cobro' => 'required|date',
+            'id_cliente' => 'required|numeric',
+            'id_forma_de_pago' => 'required|numeric',
+            'total' => 'required|numeric'
         ]);
 
         /* Grabar cabecera de cobro */
@@ -87,8 +95,8 @@ class CobroController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cobro  $cobro
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function show($id)
     {
@@ -106,8 +114,8 @@ class CobroController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Cobro  $cobro
-     * @return \Illuminate\Http\Response
+     * @param Cobro $cobro
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function edit(Cobro $cobro)
     {
@@ -117,9 +125,9 @@ class CobroController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cobro  $cobro
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Cobro $cobro
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Cobro $cobro)
     {
@@ -129,8 +137,8 @@ class CobroController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cobro  $cobro
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy($id)
     {
@@ -138,17 +146,28 @@ class CobroController extends Controller
         return redirect('cobro');
     }
 
+    /**
+     * Seleccionar el cliente para el cobro
+     *
+     * @return Application|Factory|View
+     */
     public function selectCliente() {
         $datos['clientes'] = Cliente::where('activo', '=', true)->orderBy('nombre')->get();
         return view('cobro.selectCliente', $datos);
     }
 
+    /**
+     * Crear un nuevo cobro
+     *
+     * @param $idCliente
+     * @return Application|Factory|View
+     */
     public function crear($idCliente) {
         $datos['formas_de_pago']=FormaDePago::where('activo_ventas', '=', true)->orderBy('nombre')->get();
         $datos['cliente']=Cliente::findOrFail($idCliente);
         $datos['ventas']=Venta::where('id_cliente', '=', $idCliente)
             ->where('cobrada', '=', '0')
-            ->select('id', 'fecha_comprobante', 'id_punto_de_venta', 'numero_comprobante', 'total')
+            ->select(['id', 'fecha_comprobante', 'id_punto_de_venta', 'numero_comprobante', 'total'])
             ->get();
         return view('cobro.crear', $datos);
     }

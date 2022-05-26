@@ -3,26 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\FormaDePago;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class FormaDePagoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
-        $datos['formas_de_pago']=FormaDePago::orderBy('nombre')->sortable()->paginate(10);
+        $datos['formas_de_pago']=FormaDePago::sortable()->paginate(10);
         return view('formaDePago.index', $datos);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -32,11 +39,15 @@ class FormaDePagoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'nombre' => 'required|string|max:45'
+        ]);
         $datosFormaDePago = request()->except('_token');
         $datosFormaDePago += ['updated_by' => Auth::user()->id];
         if($request->has('activo_ventas')) {
@@ -58,19 +69,19 @@ class FormaDePagoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\FormaDePago  $formaDePago
-     * @return \Illuminate\Http\Response
+     * @param FormaDePago $formaDePago
+     * @return Response
      */
-    public function show(FormaDePago $formaDePago)
+/*    public function show(FormaDePago $formaDePago)
     {
         //
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\FormaDePago  $formaDePago
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function edit($id)
     {
@@ -81,12 +92,16 @@ class FormaDePagoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\FormaDePago  $formaDePago
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'nombre' => 'required|string|max:45'
+        ]);
         $datosFormaDePago = request()->except('_token', '_method');
         $datosFormaDePago += ['updated_by' => Auth::user()->id];
         if($request->has('activo_ventas')) {
@@ -102,15 +117,15 @@ class FormaDePagoController extends Controller
             $datosFormaDePago['activo_compras'] = false;
         }
         FormaDePago::where('id','=',$id)->update($datosFormaDePago);
-        $formaDePago = FormaDePago::findOrFail($id);
+        //$formaDePago = FormaDePago::findOrFail($id);
         return redirect('formaDePago');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\FormaDePago  $formaDePago
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy($id)
     {

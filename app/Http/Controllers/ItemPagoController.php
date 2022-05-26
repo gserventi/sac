@@ -2,89 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Compra;
-use App\Models\FormaDePago;
 use App\Models\ItemPago;
-use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ItemPagoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function index()
+/*    public function index()
     {
         //
-    }
+    }*/
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function create()
+/*    public function create()
     {
         //
-    }
+    }*/
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function store(Request $request)
+/*    public function store(Request $request)
     {
 
 
-    }
+    }*/
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ItemPago  $itemPago
-     * @return \Illuminate\Http\Response
+     * @param ItemPago $itemPago
+     * @return Response
      */
-    public function show(ItemPago $itemPago)
+/*    public function show(ItemPago $itemPago)
     {
         //
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ItemPago  $itemPago
-     * @return \Illuminate\Http\Response
+     * @param ItemPago $itemPago
+     * @return Response
      */
-    public function edit(ItemPago $itemPago)
+/*    public function edit(ItemPago $itemPago)
     {
         //
-    }
+    }*/
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ItemPago  $itemPago
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param ItemPago $itemPago
+     * @return Response
      */
-    public function update(Request $request, ItemPago $itemPago)
+/*    public function update(Request $request, ItemPago $itemPago)
     {
         //
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ItemPago  $itemPago
-     * @return \Illuminate\Http\Response
+     * @param ItemPago $itemPago
+     * @return Response
      */
-    public function destroy(ItemPago $itemPago)
+/*    public function destroy(ItemPago $itemPago)
     {
         //
-    }
+    }*/
 
 }

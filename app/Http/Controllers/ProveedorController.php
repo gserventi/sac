@@ -7,26 +7,33 @@ use App\Models\PorcentajeIVA;
 use App\Models\Proveedor;
 use App\Models\Rubro;
 use App\Models\TipoDeComprobante;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ProveedorController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
-        $datos['proveedores']=Proveedor::orderBy('nombre')->sortable()->paginate(10);
+        $datos['proveedores']=Proveedor::sortable()->paginate(10);
         return view('proveedor.index', $datos);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -40,11 +47,24 @@ class ProveedorController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'nombre' => 'required|string|max:200',
+            'cuit' => 'nullable|string|max:11',
+            'email' => 'nullable|email',
+            'telefono' => 'nullable|string|max:100',
+            'id_rubro' => 'numeric',
+            'dias_pago' => 'nullable|numeric|max:365',
+            'id_porcentaje_iva' => 'nullable|numeric',
+            'id_forma_de_pago_default' => 'nullable|numeric',
+            'id_tipo_comprobante' => 'nullable|numeric',
+            'observaciones' => 'nullable|string|max:255'
+        ]);
         $proveedor = request()->except('_token');
         $proveedor += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
@@ -60,19 +80,19 @@ class ProveedorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Proveedor  $proveedor
-     * @return \Illuminate\Http\Response
+     * @param Proveedor $proveedor
+     * @return Response
      */
-    public function show(Proveedor $proveedor)
+/*    public function show(Proveedor $proveedor)
     {
         //
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Proveedor  $proveedor
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function edit($id)
     {
@@ -92,12 +112,25 @@ class ProveedorController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Proveedor  $proveedor
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'nombre' => 'required|string|max:200',
+            'cuit' => 'nullable|string|max:11',
+            'email' => 'nullable|email',
+            'telefono' => 'nullable|string|max:100',
+            'id_rubro' => 'numeric',
+            'dias_pago' => 'nullable|numeric|max:365',
+            'id_porcentaje_iva' => 'nullable|numeric',
+            'id_forma_de_pago_default' => 'nullable|numeric',
+            'id_tipo_comprobante' => 'nullable|numeric',
+            'observaciones' => 'nullable|string|max:255'
+        ]);
         $proveedor = request()->except('_token', '_method');
         $proveedor += ['updated_by' => Auth::user()->id];
         if($request->has('activo')) {
@@ -107,15 +140,15 @@ class ProveedorController extends Controller
             $proveedor['activo'] = false;
         }
         Proveedor::where('id','=',$id)->update($proveedor);
-        $proveedor = Proveedor::findOrFail($id);
+        //$proveedor = Proveedor::findOrFail($id);
         return redirect('proveedor');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Proveedor  $proveedor
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy($id)
     {

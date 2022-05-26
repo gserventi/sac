@@ -7,27 +7,34 @@ use App\Models\ItemPago;
 use App\Models\Pago;
 use App\Models\Compra;
 use App\Models\Proveedor;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class PagoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function index()
     {
-        $datos['pagos']=Pago::orderBy('id', 'DESC')->sortable()->paginate(10);
+        $datos['pagos']=Pago::sortable()->paginate(10);
         return view('pago.index', $datos);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -39,16 +46,17 @@ class PagoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
         $this->validate($request, [
-            'fecha_pago' => 'required',
-            'id_proveedor' => 'required',
-            'id_forma_de_pago' => 'required',
-            'total' => 'required'
+            'fecha_pago' => 'required|date',
+            'id_proveedor' => 'required|numeric',
+            'id_forma_de_pago' => 'required|numeric',
+            'total' => 'required|numeric'
         ]);
 
         /* Grabar cabecera de pago */
@@ -81,7 +89,7 @@ class PagoController extends Controller
                 ]);
 
             }
-        };
+        }
 
         return redirect('pago');
     }
@@ -89,8 +97,8 @@ class PagoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Pago  $pago
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function show($id)
     {
@@ -110,8 +118,8 @@ class PagoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Pago  $pago
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|Factory|View|Response
      */
     public function edit($id)
     {
@@ -132,9 +140,9 @@ class PagoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pago  $pago
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, $id)
     {
@@ -144,8 +152,8 @@ class PagoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Pago  $pago
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy($id)
     {
@@ -164,7 +172,7 @@ class PagoController extends Controller
         $datos['proveedor']=Proveedor::findOrFail($idProveedor);
         $datos['compras']=Compra::where('id_proveedor', '=', $idProveedor)
             ->where('pagada', '=', '0')
-            ->select('id', 'fecha_comprobante', 'id_tipo_comprobante', 'numero_comprobante', 'neto')
+            ->select(['id', 'fecha_comprobante', 'id_tipo_comprobante', 'numero_comprobante', 'neto'])
             ->get();
         return view('pago.crear', $datos);
     }
