@@ -50,7 +50,7 @@
                                 <div class="form-group">
                                     <label for="id_forma_de_pago" class="form-control-label">Forma de Pago: </label>
                                     <select name="id_forma_de_pago" id="select" class="form-control">
-                                        <option selected value=""></option>
+                                        <option selected value="{{$proveedor->id_forma_de_pago_default}}">{{$proveedor->formaDePago->nombre}}</option>
                                         @foreach($formas_de_pago as $formaDePago)
                                             <option value="{{$formaDePago->id ?? ''}}">{{$formaDePago->nombre ?? ''}}</option>
                                         @endforeach
@@ -82,7 +82,7 @@
                                                 <td>$ <span id="valorNeto-{{$compra->id}}">{{$compra->neto}}</span></td>
                                                 <td>
                                                     <input type="checkbox" name="checkPagar-{{$compra->id}}" id="checkPagar-{{$compra->id}}"
-                                                           onclick="calcularTotal('checkPagar-{{$compra->id}}','valorNeto-{{$compra->id}}', 'pagoTotal')">
+                                                           onclick="calcularTotal('checkPagar-{{$compra->id}}', 'valorNeto-{{$compra->id}}', 'pagoTotal')">
                                                 </td>
                                             </tr>
                                             <tr class="spacer"></tr>

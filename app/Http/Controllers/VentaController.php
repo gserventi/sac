@@ -72,8 +72,10 @@ class VentaController extends Controller
         }
         Venta::insert($datosVenta);
         $puntoDeVenta = PuntoDeVenta::findOrFail($datosVenta['id_punto_de_venta']);
-        $puntoDeVenta->ultimo_numero = $puntoDeVenta->ultimo_numero + 1;
-        PuntoDeVenta::where('id', '=', $datosVenta['id_punto_de_venta'])->update($puntoDeVenta);
+        $ultimo_numero = $puntoDeVenta->ultimo_numero + 1;
+        PuntoDeVenta::where('id', '=', $puntoDeVenta->id)->update([
+            'ultimo_numero' => $ultimo_numero
+        ]);
         return redirect('venta');
     }
 

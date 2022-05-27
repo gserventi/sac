@@ -57,7 +57,7 @@
                                 <div class="form-group">
                                     <label for="id_punto_de_venta" class="form-control-label">Punto de Venta: </label>
                                     <select name="id_punto_de_venta" id="select" class="form-control"
-                                            onchange="proximoNumeroComprobanteVenta(this.value)">
+                                            onchange="proximoNumeroComprobanteVenta(this.value, {{$puntos_de_venta}})">
                                         <option selected value="{{$venta->puntoDeVenta->id ?? ''}}">{{$venta->puntoDeVenta->nombre ?? ''}} {{$venta->puntoDeVenta->prefijo ?? ''}}</option>
                                         @foreach($puntos_de_venta as $puntoDeVenta)
                                             <option value="{{$puntoDeVenta->id ?? ''}}">
@@ -90,7 +90,7 @@
                                 <div class="form-group">
                                     <label for="gravado" class="form-control-label">Gravado: </label>
                                     <input type="text" name="gravado" id="gravado" value="{{$venta->gravado ?? ''}}" class="form-control"
-                                           onchange="calcularIva21Venta(); calcularTotalVenta()">
+                                           onchange="calcularTasa('gravado', 'iva_21', 0.21); calcularTotalVenta()">
                                     <small class="form-text small-text-light">Ingrese el valor Gravado, si corresponde. De lo contrario, puede dejar vacio este campo</small>
                                 </div>
                             </div>
@@ -124,9 +124,6 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        var puntos = {!! json_encode($puntos_de_venta->toArray(), JSON_HEX_TAG) !!};
-    </script>
 @endsection
 
 

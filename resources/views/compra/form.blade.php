@@ -28,7 +28,8 @@
     <div class="col-12 col-md-8">
         <div class="form-group">
             <label for="id_proveedor" class="form-control-label">Proveedor: </label>
-            <select name="id_proveedor" id="select" class="form-control">
+            <select name="id_proveedor" id="select" class="form-control"
+                    onchange="completarTipoComprobanteDefault(this.value, {{$proveedores}})">
                 <option selected value="{{$compra->proveedor->id ?? ''}}">{{$compra->proveedor->nombre ?? ''}}</option>
                 @foreach($proveedores as $proveedor)
                     <option value="{{$proveedor->id ?? ''}}">{{$proveedor->nombre ?? ''}}</option>
@@ -50,7 +51,7 @@
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="id_tipo_comprobante" class="form-control-label">Tipo de Comprobante: </label>
-            <select name="id_tipo_comprobante" id="select" class="form-control">
+            <select name="id_tipo_comprobante" id="id_tipo_comprobante" class="form-control">
                 <option selected value="{{$compra->tipoDeComprobante->id ?? ''}}">{{$compra->tipoDeComprobante->nombre ?? ''}}</option>
                 @foreach($tipos_de_comprobantes as $tipoDeComprobante)
                     <option value="{{$tipoDeComprobante->id ?? ''}}">{{$tipoDeComprobante->nombre ?? ''}}</option>
@@ -72,22 +73,24 @@
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="exento" class="form-control-label">Exento: </label>
-{{--            <input type="text" name="exento" id="exento" value="@if(isset($compra->exento)) @if($compra->exento > 0) ${{$compra->exento}} @endif @endif" class="form-control">--}}
-            <input type="text" name="exento" id="exento" value="{{$compra->exento ?? ''}}" class="form-control">
+            <input type="text" name="exento" id="exento" value="{{$compra->exento ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor Exento, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="no_gravado" class="form-control-label">No Gravado: </label>
-            <input type="text" name="no_gravado" id="no_gravado" value="{{$compra->no_gravado ?? ''}}" class="form-control">
+            <input type="text" name="no_gravado" id="no_gravado" value="{{$compra->no_gravado ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor No Gravado, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="gravado" class="form-control-label">Gravado: </label>
-            <input type="text" name="gravado" id="gravado" value="{{$compra->gravado ?? ''}}" class="form-control">
+            <input type="text" name="gravado" id="gravado" value="{{$compra->gravado ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor Gravado, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
@@ -97,21 +100,24 @@
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="iva_21" class="form-control-label">IVA 21%: </label>
-            <input type="text" name="iva_21" id="iva_21" value="{{$compra->iva_21 ?? ''}}" class="form-control">
+            <input type="text" name="iva_21" id="iva_21" value="{{$compra->iva_21 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor IVA 21%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="iva_27" class="form-control-label">IVA 27%: </label>
-            <input type="text" name="iva_27" id="iva_27" value="{{$compra->iva_27 ?? ''}}" class="form-control">
+            <input type="text" name="iva_27" id="iva_27" value="{{$compra->iva_27 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor IVA 27%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
     <div class="col-12 col-md-4">
         <div class="form-group">
             <label for="iva_105" class="form-control-label">IVA 10.5%: </label>
-            <input type="text" name="iva_105" id="iva_105" value="{{$compra->iva_105 ?? ''}}" class="form-control">
+            <input type="text" name="iva_105" id="iva_105" value="{{$compra->iva_105 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor IVA 10.5%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
@@ -121,14 +127,16 @@
     <div class="col-12 col-md-6">
         <div class="form-group">
             <label for="percepcion_iva_RG3337_3" class="form-control-label">Percep.IVA RG 3337 3%: </label>
-            <input type="text" name="percepcion_iva_RG3337_3" id="percepcion_iva_RG3337_3" value="{{$compra->percepcion_iva_RG3337_3 ?? ''}}" class="form-control">
+            <input type="text" name="percepcion_iva_RG3337_3" id="percepcion_iva_RG3337_3" value="{{$compra->percepcion_iva_RG3337_3 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor de Percep.IVA RG 3337 3%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-group">
             <label for="percepcion_iva_RG3337_105" class="form-control-label">Percep.IVA RG 3337 10.5%: </label>
-            <input type="text" name="percepcion_iva_RG3337_105" id="percepcion_iva_RG3337_105" value="{{$compra->percepcion_iva_RG3337_105 ?? ''}}" class="form-control">
+            <input type="text" name="percepcion_iva_RG3337_105" id="percepcion_iva_RG3337_105" value="{{$compra->percepcion_iva_RG3337_105 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor de Percep.IVA RG 3337 10.5%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
@@ -138,14 +146,16 @@
     <div class="col-12 col-md-6">
         <div class="form-group">
             <label for="percepcion_iibb_caba_15" class="form-control-label">Percep.IIBB CABA 1.5%: </label>
-            <input type="text" name="percepcion_iibb_caba_15" id="percepcion_iibb_caba_15" value="{{$compra->percepcion_iibb_caba_15 ?? ''}}" class="form-control">
+            <input type="text" name="percepcion_iibb_caba_15" id="percepcion_iibb_caba_15" value="{{$compra->percepcion_iibb_caba_15 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor de Percep.IIBB CABA 1.5%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-group">
             <label for="percepcion_iibb_ba_01" class="form-control-label">Percep.IIBB BA 0.1%: </label>
-            <input type="text" name="percepcion_iibb_ba_01" id="percepcion_iibb_ba_01" value="{{$compra->percepcion_iibb_ba_01 ?? ''}}" class="form-control">
+            <input type="text" name="percepcion_iibb_ba_01" id="percepcion_iibb_ba_01" value="{{$compra->percepcion_iibb_ba_01 ?? ''}}" class="form-control"
+                   onchange="calcularTotalCompra()">
             <small class="form-text small-text-light">Ingrese el valor de Percep.IIBB BA 0.1%, si corresponde. De lo contrario, puede dejar vacio este campo</small>
         </div>
     </div>
