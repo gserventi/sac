@@ -18,7 +18,6 @@
                         <th>@sortablelink('id','Codigo')</th>
                         <th>@sortablelink('fecha_pago','Fecha de Pago')</th>
                         <th>@sortablelink('id_proveedor', 'Proveedor')</th>
-                        <th>@sortablelink('id_forma_de_pago','Forma de Pago')</th>
                         <th>@sortablelink('total','Total')</th>
                         <th></th>
                     </tr>
@@ -29,7 +28,6 @@
                             <td>{{$pago->id}}</td>
                             <td>@if(isset($pago->fecha_pago)) {{date('d/m/Y', strtotime($pago->fecha_pago))}} @endif </td>
                             <td>{{$pago->proveedor->nombre}}</td>
-                            <td>{{$pago->formaDePago->nombre}}</td>
                             <td>@if($pago->total > 0) $ {{number_format($pago->total, 2)}} @else - @endif</td>
                             <td>
                                 <div class="table-data-feature">

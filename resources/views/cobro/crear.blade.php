@@ -32,21 +32,21 @@
                         @endif
 
                         <div class="row">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="fecha_cobro" class="form-control-label">Fecha de Cobro: </label>
                                     <input type="date" name="fecha_cobro" id="fecha_cobro" value="{{$cobro->fecha_cobro ?? date('Y-m-d')}}" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="id_cliente" class="form-control-label">Cliente: </label>
-                                    <select name="id_cliente" id="select" class="form-control">
+                                    <select name="id_cliente" id="id_cliente" class="form-control">
                                         <option selected value="{{$cliente->id ?? ''}}">{{$cliente->nombre ?? ''}}</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
+{{--                            <div class="col-12 col-md-4">
                                 <div class="form-group">
                                     <label for="id_forma_de_pago" class="form-control-label">Forma de Pago: </label>
                                     <select name="id_forma_de_pago" id="select" class="form-control">
@@ -56,7 +56,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div>--}}
                         </div>
 
                         <div class="row">
@@ -77,7 +77,7 @@
                                             <td>{{$venta->id}}</td>
                                             <td>{{date('d/m/Y', strtotime($venta->fecha_comprobante))}}</td>
                                             <td>{{$venta->numero_comprobante}}</td>
-                                            <td>$ <span id="valorNeto-{{$venta->id}}">{{$venta->total}}</span></td>
+                                            <td> <span id="valorNeto-{{$venta->id}}">{{$venta->total}}</span></td>
                                             <td>
                                                 <input type="checkbox" name="checkCobrar-{{$venta->id}}" id="checkCobrar-{{$venta->id}}"
                                                        onclick="calcularTotal('checkCobrar-{{$venta->id}}','valorNeto-{{$venta->id}}', 'cobroTotal')">
@@ -96,7 +96,7 @@
                             <div class="col-12 col-md-3"></div>
                             <div class="col-12 col-md-3">
                                 <div class="form-group">
-                                    <label for="total" class="form-control-label">Total: </label>
+                                    <label for="cobroTotal" class="form-control-label">Total Comprobantes: </label>
                                     <input type="number" name="total" id="cobroTotal" class="form-control" value="{{$cobro->total ?? '0.00'}}" step=".01">
                                 </div>
                             </div>

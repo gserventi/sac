@@ -21,8 +21,8 @@
                         <div class="row">
                             <div class="col-12 col-md-4">
                                 <div class="form-group">
-                                    <label for="id_periodo" class="form-control-label">Periodo: </label>
-                                    <select name="id_periodo" id="select" class="form-control">
+                                    <label for="select" class="form-control-label">Periodo: </label>
+                                    <select name="id_periodo" id="id_periodo" class="form-control">
                                         <option selected value="{{$venta->periodo->id ?? ''}}">{{$venta->periodo->nombre ?? ''}}</option>
                                         @foreach($periodos as $periodo)
                                             <option value="{{$periodo->id ?? ''}}">{{$periodo->nombre ?? ''}}</option>
@@ -34,7 +34,7 @@
                             <div class="col-12 col-md-8">
                                 <div class="form-group">
                                     <label for="id_cliente" class="form-control-label">Cliente: </label>
-                                    <select name="id_cliente" id="select" class="form-control">
+                                    <select name="id_cliente" id="id_cliente" class="form-control">
                                         <option selected value="{{$venta->cliente->id ?? ''}}">{{$venta->cliente->nombre ?? ''}}</option>
                                         @foreach($clientes as $cliente)
                                             <option value="{{$cliente->id ?? ''}}">{{$cliente->nombre ?? ''}}</option>
@@ -56,7 +56,7 @@
                             <div class="col-12 col-md-4">
                                 <div class="form-group">
                                     <label for="id_punto_de_venta" class="form-control-label">Punto de Venta: </label>
-                                    <select name="id_punto_de_venta" id="select" class="form-control"
+                                    <select name="id_punto_de_venta" id="id_punto_de_venta" class="form-control"
                                             onchange="proximoNumeroComprobanteVenta(this.value, {{$puntos_de_venta}})">
                                         <option selected value="{{$venta->puntoDeVenta->id ?? ''}}">{{$venta->puntoDeVenta->nombre ?? ''}} {{$venta->puntoDeVenta->prefijo ?? ''}}</option>
                                         @foreach($puntos_de_venta as $puntoDeVenta)
@@ -108,7 +108,7 @@
                             <div class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="total" class="form-control-label">Total: </label>
-                                    <input type="text" name="total" id="total" value="{{$venta->total ?? ''}}" class="form-control">
+                                    <input type="text" name="total" id="total" value="{{$venta->total ?? ''}}" class="form-control" disabled>
                                     <small class="form-text small-text-light">Ingrese el valor del total</small>
                                 </div>
                             </div>
