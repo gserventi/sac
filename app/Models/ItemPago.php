@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -65,9 +66,9 @@ class ItemPago extends Model
     /**
      * Devuelve la compra asociada a los items de pago
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function compras(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function compras(): BelongsToMany
     {
         return $this->belongsToMany(Compra::class, 'id_compra');
     }

@@ -2,3 +2,8 @@
     color: darkgray;
 }
 
+.au-btn:disabled {
+    background-color: gray;
+    opacity: 1;
+    cursor: default;
+}

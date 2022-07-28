@@ -74,4 +74,26 @@ function calcularTotalCompra() {
     ).toString();
 }
 
+function mostrarAgregarPagos() {
+    document.getElementById('agregar-pagos').style.display = "flex";
+    document.getElementById('total-pagos').style.display = "flex";
+}
 
+function sumarPagoPagar(importe,totalPagos,botonMas,nombre) {
+    let valor = document.getElementById(importe);
+    let total = document.getElementById(totalPagos);
+    let totalComprobantes = document.getElementById('pagoTotal');
+    let boton = document.getElementById(botonMas);
+    let tot;
+    if(isNaN(total.value)||(total.value===0)) {tot = 0;} else {tot=parseFloat(total.value);}
+    if (parseFloat(valor.value)) {
+        tot += parseFloat(valor.value);
+    }
+    total.value = tot.toFixed(2);
+    boton.disabled = true;
+    valor.readOnly = true;
+    nombre.readOnly = true; // No funciona
+    if (totalComprobantes.value === total.value) {
+        document.getElementById('boton-guardar').disabled = false;
+    }
+}

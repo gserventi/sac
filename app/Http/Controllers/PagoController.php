@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FormaDePago;
+use App\Models\FormaDePagoPorPago;
 use App\Models\ItemPago;
 use App\Models\Pago;
 use App\Models\Compra;
@@ -55,19 +56,17 @@ class PagoController extends Controller
         $this->validate($request, [
             'fecha_pago' => 'required|date',
             'id_proveedor' => 'required|numeric',
-            'id_forma_de_pago' => 'required|numeric',
-            'total' => 'required|numeric'
+            'pagoTotal' => 'required|numeric',
+            'totalPagos' => 'required|numeric'
         ]);
 
         /* Grabar cabecera de pago */
         $fecha_pago = $request->fecha_pago;
         $id_proveedor = $request->id_proveedor;
-        $id_forma_de_pago = $request->id_forma_de_pago;
-        $total = $request->total;
+        $total = $request->totalPagos;
         $id_pago = Pago::insertGetId([
             'fecha_pago' => $fecha_pago,
             'id_proveedor' => $id_proveedor,
-            'id_forma_de_pago' => $id_forma_de_pago,
             'total' => $total,
             'updated_by' => Auth::user()->id
         ]);
@@ -91,6 +90,17 @@ class PagoController extends Controller
             }
         }
 
+        /* Grabar formas de pago */
+        $formas_de_pago = $request->formasDePago;
+        foreach ($formas_de_pago as $forma_de_pago) {
+            FormaDePagoPorPago::insert([
+                'id_pago' => $id_pago,
+                'id_forma_de_pago' => $forma_de_pago['id'],
+                'importe' => $forma_de_pago['importe'],
+                'updated_by' => Auth::user()->id
+            ]);
+        }
+
         return redirect('pago');
     }
 
@@ -110,9 +120,15 @@ class PagoController extends Controller
             ->select('compras.id','compras.fecha_comprobante', 'tipos_de_comprobantes.nombre', 'compras.numero_comprobante', 'compras.neto')
             ->where('id_pago', '=', $id)
             ->get();
+        $formasDePago=DB::table('formas_de_pago_por_pago')
+            ->join('formas_de_pago', 'formas_de_pago_por_pago.id_forma_de_pago', '=', 'formas_de_pago.id')
+            ->select('formas_de_pago.nombre','formas_de_pago_por_pago.importe')
+            ->where('formas_de_pago_por_pago.id_pago', '=', $id)
+            ->get();
         return view('pago.show')
             ->with(compact('pago'))
-            ->with(compact('detallesPago'));
+            ->with(compact('detallesPago'))
+            ->with(compact('formasDePago'));
     }
 
     /**
